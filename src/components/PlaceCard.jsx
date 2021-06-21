@@ -20,7 +20,7 @@ const useStyles = makeStyles({
 });
 
 const PlaceCard = ({
-  place: { name, location, description, isFavorite },
+  place: { id, name, location, description, isFavorite },
   toggleFavorite,
 }) => {
   const classes = useStyles();
@@ -42,8 +42,11 @@ const PlaceCard = ({
           <Button size='small' onClick={() => toggleFavorite(isFavorite)}>
             {isFavorite ? 'Remove Favorite' : 'Add to Favorite'}
           </Button>
-          <IconButton aria-label='add to favorites'>
-            <FavoriteIcon />
+          <IconButton
+            aria-label='add to favorites'
+            onClick={() => toggleFavorite(isFavorite, id)}
+          >
+            <FavoriteIcon color={isFavorite ? 'secondary' : 'disabled'} />
           </IconButton>
         </CardActions>
       </Card>

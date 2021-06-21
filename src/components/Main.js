@@ -36,7 +36,7 @@ const Main = () => {
     setPlacesList(data);
   }, []);
 
-  function toggleFavorite(value) {
+  function toggleFavorite(value, id) {
     //   Api Call
   }
 
