@@ -13,9 +13,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
   title: {
     flexGrow: 1,
     display: 'none',
@@ -84,6 +81,9 @@ export default function Navbar({ serachQuery, handleSerachQuery }) {
           </Typography>
 
           <Button
+            variant='contained'
+            // color='primary'
+            size='small'
             onClick={() => {
               alert('clicked');
             }}
@@ -107,7 +107,10 @@ export default function Navbar({ serachQuery, handleSerachQuery }) {
               onChange={handleSerachQuery}
             />
           </div>
-          <Button href='#text-buttons'>Logout</Button>
+
+          <Button color='secondary' href='#text-buttons'>
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
     </div>
