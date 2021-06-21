@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -24,6 +24,11 @@ const PlaceCard = ({
   toggleFavorite,
 }) => {
   const classes = useStyles();
+  const [isFav, setIsFav] = useState(isFavorite);
+  const handleClickFav = (isFav, id) => {
+    setIsFav(!isFav);
+    toggleFavorite(isFav, id);
+  };
   return (
     <>
       <Card>
@@ -39,14 +44,11 @@ const PlaceCard = ({
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size='small' onClick={() => toggleFavorite(isFavorite)}>
-            {isFavorite ? 'Remove Favorite' : 'Add to Favorite'}
-          </Button>
           <IconButton
             aria-label='add to favorites'
-            onClick={() => toggleFavorite(isFavorite, id)}
+            onClick={() => handleClickFav(isFav, id)}
           >
-            <FavoriteIcon color={isFavorite ? 'secondary' : 'disabled'} />
+            <FavoriteIcon color={isFav ? 'secondary' : 'disabled'} />
           </IconButton>
         </CardActions>
       </Card>
