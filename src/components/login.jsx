@@ -10,7 +10,8 @@ import {
 import React, { useState } from 'react';
 
 // Login true means logins page else registration page
-const Login = ({ login }) => {
+const Login = ({ loginProp }) => {
+  const [login, setLogin] = useState(loginProp);
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -22,41 +23,65 @@ const Login = ({ login }) => {
       <Container maxWidth='sm'>
         <Box margin={1} padding={1}>
           {/* <Paper> */}
-          <Box padding={1} margin={1}>
+          <Box paddingY={1} paddingX={0} marginY={1}>
             <Typography variant='h4'>{login ? 'Login' : 'Register'}</Typography>
           </Box>
           <form>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField label='Email' variant='outlined' fullWidth />
+                <TextField
+                  label='Email'
+                  variant='outlined'
+                  type='email'
+                  fullWidth
+                />
               </Grid>
-              <Grid item xs={12}>
-                {!login && (
+              {!login && (
+                <Grid item xs={12}>
                   <TextField label='Name' variant='outlined' fullWidth />
-                )}
-              </Grid>
+                </Grid>
+              )}
               <Grid item xs={12}>
-                <TextField label='Password' variant='outlined' fullWidth />
+                <TextField
+                  label='Password'
+                  variant='outlined'
+                  type='password'
+                  fullWidth
+                />
               </Grid>
-              <Grid item xs={12}>
-                {!login && (
+              {!login && (
+                <Grid item xs={12}>
                   <TextField
                     label='Confirm Password'
                     variant='outlined'
+                    type='password'
                     fullWidth
                   />
-                )}
-              </Grid>
+                </Grid>
+              )}
             </Grid>
 
-            <Grid container justify='flex-end'>
+            <Grid container spacing={2} justify='space-between'>
               <Grid item>
                 <Button
-                  onClick={() => (login ? handleLogin() : handleRegister())}
-                  variant='contained'
+                  variant='text'
+                  size='small'
+                  onClick={() => setLogin(!login)}
                 >
-                  {login ? 'Login' : 'Register'}
+                  {login
+                    ? 'New user? Register here.'
+                    : 'Already registered? Sign in'}
                 </Button>
+              </Grid>
+              <Grid item>
+                <Box spacing={1}>
+                  <Button
+                    onClick={() => (login ? handleLogin() : handleRegister())}
+                    variant='contained'
+                  >
+                    {login ? 'Login' : 'Register'}
+                  </Button>
+                </Box>
               </Grid>
             </Grid>
           </form>
