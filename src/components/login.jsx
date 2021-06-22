@@ -3,11 +3,12 @@ import {
   Button,
   Container,
   Grid,
-  Paper,
+  // Paper,
   TextField,
   Typography,
 } from '@material-ui/core';
 import React, { useState } from 'react';
+import Navbar from './Navbar';
 
 // Login true means logins page else registration page
 const Login = ({ loginProp }) => {
@@ -20,6 +21,7 @@ const Login = ({ loginProp }) => {
   const handleRegister = () => {};
   return (
     <>
+      <Navbar welcome={true} />
       <Container maxWidth='sm'>
         <Box margin={1} padding={1}>
           {/* <Paper> */}

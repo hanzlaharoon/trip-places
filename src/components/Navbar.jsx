@@ -65,6 +65,7 @@ export default function Navbar({
   serachQuery,
   handleSerachQuery,
   getSearchResults,
+  welcome,
 }) {
   const classes = useStyles();
   const [searchStr, setSearchStr] = useState(serachQuery);
@@ -94,39 +95,43 @@ export default function Navbar({
             Trip-Places
           </Typography>
 
-          <Button
-            variant='contained'
-            // color='primary'
-            size='small'
-            onClick={() => {
-              alert('clicked');
-            }}
-          >
-            Add New Place
-          </Button>
+          {!welcome && (
+            <>
+              <Button
+                variant='contained'
+                // color='primary'
+                size='small'
+                onClick={() => {
+                  alert('clicked');
+                }}
+              >
+                Add New Place
+              </Button>
 
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder='Search…'
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-              id='searchQuery'
-              value={searchStr}
-              onChange={(e) => setSearchStr(e.target.value)}
-              // onChange={handleSerachQuery}
-              onKeyPress={handleKeyPress}
-            />
-          </div>
+              <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
+                <InputBase
+                  placeholder='Search…'
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                  inputProps={{ 'aria-label': 'search' }}
+                  id='searchQuery'
+                  value={searchStr}
+                  onChange={(e) => setSearchStr(e.target.value)}
+                  // onChange={handleSerachQuery}
+                  onKeyPress={handleKeyPress}
+                />
+              </div>
 
-          <Button color='secondary' href='#text-buttons'>
-            Logout
-          </Button>
+              <Button color='secondary' href='#text-buttons'>
+                Logout
+              </Button>
+            </>
+          )}
         </Toolbar>
       </AppBar>
     </div>
