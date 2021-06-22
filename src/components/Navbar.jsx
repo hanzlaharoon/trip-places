@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
+// import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
+// import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import { Button } from '@material-ui/core';
 
@@ -61,8 +61,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Navbar({ serachQuery, handleSerachQuery }) {
+export default function Navbar({
+  serachQuery,
+  handleSerachQuery,
+  getSearchResults,
+}) {
   const classes = useStyles();
+  const [searchStr, setSearchStr] = useState(serachQuery);
+
+  const handleKeyPress = (e) => {
+    if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+      // console.log('Enter Key Pressed');
+      // console.log('searchQuery', serachQuery);
+      e.preventDefault();
+      getSearchResults(searchStr);
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -103,8 +117,10 @@ export default function Navbar({ serachQuery, handleSerachQuery }) {
               }}
               inputProps={{ 'aria-label': 'search' }}
               id='searchQuery'
-              value={serachQuery}
-              onChange={handleSerachQuery}
+              value={searchStr}
+              onChange={(e) => setSearchStr(e.target.value)}
+              // onChange={handleSerachQuery}
+              onKeyPress={handleKeyPress}
             />
           </div>
 

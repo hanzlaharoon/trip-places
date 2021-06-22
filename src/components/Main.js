@@ -1,4 +1,4 @@
-import { Box, Button, Grid } from '@material-ui/core';
+import { Box, Button, Grid, Typography } from '@material-ui/core';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { baseUrl } from '../shared/baseUrl';
@@ -39,31 +39,34 @@ const Main = () => {
     //   },
     // ];
     // setPlacesList(data);
-
-    if (!showFavorites) {
-      axios
-        .get(baseUrl + 'places/', {
-          params: { limit: 7, page: currentPage },
-        })
-        .then((res) => {
-          console.log('/places', res);
-          setPlacesList(res.data.places);
-          setTotalPages(res.data.totalPages);
-        })
-        .catch((err) => console.log(err));
+    if (serachQuery) {
+      fetchSearchResuls(serachQuery);
     } else {
-      axios
-        .get(baseUrl + 'places/favorites/', {
-          params: { limit: 5, page: currentPage },
-        })
-        .then((res) => {
-          console.log('places/favorites', res);
-          setPlacesList(res.data.places);
-          setTotalPages(res.data.totalPages);
-        })
-        .catch((err) => console.log(err));
+      if (!showFavorites) {
+        axios
+          .get(baseUrl + 'places/', {
+            params: { limit: 7, page: currentPage },
+          })
+          .then((res) => {
+            console.log('/places', res);
+            setPlacesList(res.data.places);
+            setTotalPages(res.data.totalPages);
+          })
+          .catch((err) => console.log(err));
+      } else {
+        axios
+          .get(baseUrl + 'places/favorites/', {
+            params: { limit: 5, page: currentPage },
+          })
+          .then((res) => {
+            console.log('places/favorites', res);
+            setPlacesList(res.data.places);
+            setTotalPages(res.data.totalPages);
+          })
+          .catch((err) => console.log(err));
+      }
     }
-  }, [showFavorites, currentPage]);
+  }, [showFavorites, currentPage, serachQuery]);
 
   function toggleFavoritePlace(value, id) {
     axios
@@ -76,33 +79,61 @@ const Main = () => {
       .catch((err) => console.log(err));
   }
 
+  const handleGetSearchResults = (searchStr) => {
+    setSerachQuery(searchStr);
+    setCurrentPage(1);
+  };
+
+  const fetchSearchResuls = (searchStr) => {
+    axios
+      .get(baseUrl + 'places/search', {
+        params: { limit: 5, page: currentPage, searchStr: searchStr },
+      })
+      .then((res) => {
+        console.log(`places/search/${searchStr}`, res);
+        setPlacesList(res.data.places);
+        setTotalPages(res.data.totalPages);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <>
       <Navbar
         serachQuery={serachQuery}
         handleSerachQuery={(e) => setSerachQuery(e.target.value)}
+        getSearchResults={handleGetSearchResults}
       />
 
-      <Box padding={1} margin={1}>
-        <Button
-          variant={!showFavorites ? 'outlined' : 'text'}
-          onClick={() => {
-            setShowFavorites(false);
-            setCurrentPage(1);
-          }}
-        >
-          All
-        </Button>
-        <Button
-          variant={showFavorites ? 'outlined' : 'text'}
-          onClick={() => {
-            setShowFavorites(true);
-            setCurrentPage(1);
-          }}
-        >
-          Favorites
-        </Button>
-      </Box>
+      {!serachQuery && (
+        <Box padding={1} margin={1}>
+          <Button
+            variant={!showFavorites ? 'outlined' : 'text'}
+            onClick={() => {
+              setShowFavorites(false);
+              setCurrentPage(1);
+            }}
+          >
+            All
+          </Button>
+          <Button
+            variant={showFavorites ? 'outlined' : 'text'}
+            onClick={() => {
+              setShowFavorites(true);
+              setCurrentPage(1);
+            }}
+          >
+            Favorites
+          </Button>
+        </Box>
+      )}
+
+      {serachQuery && (
+        <Box padding={1} margin={1}>
+          {/* <Button variant='text'>Search Results</Button> */}
+          <Typography variant='h4'>Search Results</Typography>
+        </Box>
+      )}
 
       <Box padding={1} margin={1}>
         <Grid container spacing={4}>

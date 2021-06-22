@@ -131,4 +131,32 @@ router
       .catch((err) => next(err));
   });
 
+router.route('/search').get(async (req, res, next) => {
+  const { page = 1, limit = 10, searchStr } = req.query;
+  try {
+    // execute query with page and limit values
+    const places = await Places.find({
+      name: { $regex: searchStr, $options: 'i' },
+    })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+    // get total documents in the Places collection
+    const count = await Places.find({
+      name: { $regex: searchStr, $options: 'i' },
+    }).countDocuments();
+
+    // return response with places, total pages, and current page
+    res.json({
+      places,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+    });
+  } catch (err) {
+    console.error(err.message);
+    next(err);
+  }
+});
+
 module.exports = router;
