@@ -85,7 +85,7 @@ const Main = () => {
 
       <Box padding={1} margin={1}>
         <Button
-          variant={!showFavorites ? 'outlined' : ''}
+          variant={!showFavorites ? 'outlined' : 'text'}
           onClick={() => {
             setShowFavorites(false);
             setCurrentPage(1);
@@ -94,7 +94,7 @@ const Main = () => {
           All
         </Button>
         <Button
-          variant={showFavorites ? 'outlined' : ''}
+          variant={showFavorites ? 'outlined' : 'text'}
           onClick={() => {
             setShowFavorites(true);
             setCurrentPage(1);
