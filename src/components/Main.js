@@ -1,6 +1,8 @@
 import { Box, Button, Grid } from '@material-ui/core';
 import { Favorite } from '@material-ui/icons';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { baseUrl } from '../shared/baseUrl';
 import Navbar from './Navbar';
 import PlaceCard from './PlaceCard';
 
@@ -11,35 +13,59 @@ const Main = () => {
 
   // Populate Data
   useEffect(() => {
-    const data = [
-      {
-        id: 1,
-        name: 'F9 Park',
-        location: 'F9, Islamabad',
-        description: 'Family Park',
-        isFavorite: true,
-      },
-      {
-        id: 2,
-        name: 'Centorus Mall',
-        location: 'F8, Islamabad',
-        description: 'Shopping Mall',
-        isFavorite: false,
-      },
-      {
-        id: 3,
-        name: 'KFC, F10 Brach',
-        location: 'F10 Markaz, Islamabad',
-        description: 'Fast Food',
-        isFavorite: false,
-      },
-    ];
+    // const data = [
+    //   {
+    //     id: 1,
+    //     name: 'F9 Park',
+    //     location: 'F9, Islamabad',
+    //     description: 'Family Park',
+    //     favorite: true,
+    //   },
+    //   {
+    //     id: 2,
+    //     name: 'Centorus Mall',
+    //     location: 'F8, Islamabad',
+    //     description: 'Shopping Mall',
+    //     favorite: false,
+    //   },
+    //   {
+    //     id: 3,
+    //     name: 'KFC, F10 Brach',
+    //     location: 'F10 Markaz, Islamabad',
+    //     description: 'Fast Food',
+    //     favorite: false,
+    //   },
+    // ];
+    // setPlacesList(data);
 
-    setPlacesList(data);
-  }, []);
+    if (!showFavorites) {
+      axios
+        .get(baseUrl + 'places/')
+        .then((res) => {
+          console.log('/places', res);
+          setPlacesList(res.data);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      axios
+        .get(baseUrl + 'places/favorites/')
+        .then((res) => {
+          console.log('places/favorites', res);
+          setPlacesList(res.data);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [showFavorites]);
 
   function toggleFavoritePlace(value, id) {
-    //   Api Call
+    axios
+      .put(baseUrl + `places/place/${id}/`, {
+        favorite: value,
+      })
+      .then((res) => {
+        console.log(`places/place/${id}/`, res);
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -67,21 +93,21 @@ const Main = () => {
       <Box padding={1} margin={1}>
         <Grid container spacing={4}>
           {/* {!placesList && 'Add Places to see here!'} */}
-          {placesList &&
-            placesList
-              .filter((place) => {
-                if (showFavorites && place.isFavorite) {
+          {/* .filter((place) => {
+                if (showFavorites && place.favorite) {
                   return place;
                 } else if (!showFavorites) return place;
-              })
-              .map((place) => (
-                <Grid key={place.id} item xs={12} sm={6} md={3}>
-                  <PlaceCard
-                    place={place}
-                    toggleFavorite={toggleFavoritePlace}
-                  />
-                </Grid>
-              ))}
+              }) */}
+          {placesList &&
+            placesList.map((place) => (
+              <Grid key={place._id} item xs={12} sm={6} md={3}>
+                <PlaceCard
+                  // key={place._id}
+                  place={place}
+                  toggleFavorite={toggleFavoritePlace}
+                />
+              </Grid>
+            ))}
         </Grid>
       </Box>
     </>

@@ -20,14 +20,14 @@ const useStyles = makeStyles({
 });
 
 const PlaceCard = ({
-  place: { id, name, location, description, isFavorite },
+  place: { _id, name, location, description, favorite },
   toggleFavorite,
 }) => {
   const classes = useStyles();
-  const [isFav, setIsFav] = useState(isFavorite);
-  const handleClickFav = (isFav, id) => {
+  const [isFav, setIsFav] = useState(favorite);
+  const handleClickFav = (isFav, _id) => {
+    toggleFavorite(!isFav, _id);
     setIsFav(!isFav);
-    toggleFavorite(isFav, id);
   };
   return (
     <>
@@ -46,7 +46,7 @@ const PlaceCard = ({
         <CardActions>
           <IconButton
             aria-label='add to favorites'
-            onClick={() => handleClickFav(isFav, id)}
+            onClick={() => handleClickFav(isFav, _id)}
           >
             <FavoriteIcon color={isFav ? 'secondary' : 'disabled'} />
           </IconButton>
