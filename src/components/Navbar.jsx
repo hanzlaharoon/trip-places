@@ -9,6 +9,7 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router';
+import AddPlace from './AddPlace';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,16 +100,17 @@ export default function Navbar({
 
           {!welcome && (
             <>
-              <Button
+              {/* <Button
                 variant='contained'
                 // color='primary'
                 size='small'
                 onClick={() => {
-                  alert('clicked');
+                  // alert('clicked');
                 }}
               >
                 Add New Place
-              </Button>
+              </Button> */}
+              <AddPlace />
 
               <div className={classes.search}>
                 <div className={classes.searchIcon}>
