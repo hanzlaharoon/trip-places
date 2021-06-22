@@ -1,15 +1,17 @@
 import { Box, Button, Grid } from '@material-ui/core';
-import { Favorite } from '@material-ui/icons';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { baseUrl } from '../shared/baseUrl';
 import Navbar from './Navbar';
 import PlaceCard from './PlaceCard';
+import Pagination from '@material-ui/lab/Pagination';
 
 const Main = () => {
   const [serachQuery, setSerachQuery] = useState('');
   const [placesList, setPlacesList] = useState();
   const [showFavorites, setShowFavorites] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
 
   // Populate Data
   useEffect(() => {
@@ -40,22 +42,28 @@ const Main = () => {
 
     if (!showFavorites) {
       axios
-        .get(baseUrl + 'places/')
+        .get(baseUrl + 'places/', {
+          params: { limit: 7, page: currentPage },
+        })
         .then((res) => {
           console.log('/places', res);
-          setPlacesList(res.data);
+          setPlacesList(res.data.places);
+          setTotalPages(res.data.totalPages);
         })
         .catch((err) => console.log(err));
     } else {
       axios
-        .get(baseUrl + 'places/favorites/')
+        .get(baseUrl + 'places/favorites/', {
+          params: { limit: 5, page: currentPage },
+        })
         .then((res) => {
           console.log('places/favorites', res);
-          setPlacesList(res.data);
+          setPlacesList(res.data.places);
+          setTotalPages(res.data.totalPages);
         })
         .catch((err) => console.log(err));
     }
-  }, [showFavorites]);
+  }, [showFavorites, currentPage]);
 
   function toggleFavoritePlace(value, id) {
     axios
@@ -78,13 +86,19 @@ const Main = () => {
       <Box padding={1} margin={1}>
         <Button
           variant={!showFavorites ? 'outlined' : ''}
-          onClick={() => setShowFavorites(false)}
+          onClick={() => {
+            setShowFavorites(false);
+            setCurrentPage(1);
+          }}
         >
           All
         </Button>
         <Button
           variant={showFavorites ? 'outlined' : ''}
-          onClick={() => setShowFavorites(true)}
+          onClick={() => {
+            setShowFavorites(true);
+            setCurrentPage(1);
+          }}
         >
           Favorites
         </Button>
@@ -110,6 +124,16 @@ const Main = () => {
             ))}
         </Grid>
       </Box>
+
+      <Grid container justify='center'>
+        <Grid item>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={(event, value) => setCurrentPage(value)}
+          />
+        </Grid>
+      </Grid>
     </>
   );
 };

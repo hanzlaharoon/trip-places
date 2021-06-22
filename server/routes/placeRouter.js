@@ -4,8 +4,8 @@ var mongoose = require('mongoose');
 
 let Places = require('../models/places');
 
-/* GET all places. */
-router.get('/', function (req, res, next) {
+/* GET all places without pagination */
+router.get('/all', function (req, res, next) {
   Places.find({})
     .then(
       (places) => {
@@ -18,8 +18,59 @@ router.get('/', function (req, res, next) {
     .catch((err) => next(err));
 });
 
+router.get('/', async (req, res, next) => {
+  // destructure page and limit and set default values
+  const { page = 1, limit = 10 } = req.query;
+  try {
+    // execute query with page and limit values
+    const places = await Places.find()
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+    // get total documents in the Places collection
+    const count = await Places.countDocuments();
+
+    // return response with places, total pages, and current page
+    res.json({
+      places,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+    });
+  } catch (err) {
+    console.error(err.message);
+    next(err);
+  }
+});
+
+/* GET all favorite places with pagination */
+router.get('/favorites', async (req, res, next) => {
+  // destructure page and limit and set default values
+  const { page = 1, limit = 10 } = req.query;
+  try {
+    // execute query with page and limit values
+    const places = await Places.find({ favorite: true })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+    // get total documents in the Places collection
+    const count = await Places.find({ favorite: true }).countDocuments();
+
+    // return response with places, total pages, and current page
+    res.json({
+      places,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+    });
+  } catch (err) {
+    console.error(err.message);
+    next(err);
+  }
+});
+
 /* GET all favorite places. */
-router.get('/favorites', function (req, res, next) {
+router.get('/allfavs', function (req, res, next) {
   Places.find({ favorite: true })
     .then(
       (places) => {
