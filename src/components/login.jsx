@@ -7,7 +7,10 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
+import axios from 'axios';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router';
+import { baseUrl } from '../shared/baseUrl';
 import Navbar from './Navbar';
 
 // Login true means logins page else registration page
@@ -17,8 +20,60 @@ const Login = ({ loginProp }) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [confirmPass, setConfirmPass] = useState();
-  const handleLogin = () => {};
-  const handleRegister = () => {};
+  const history = useHistory();
+  const handleLogin = () => {
+    const userObj = {
+      email: email,
+      password: password,
+    };
+    axios
+      .post(baseUrl + 'users/login/', userObj)
+      .then((res) => {
+        console.log('/login', res);
+        if (res.data) {
+          console.log('Login Successful');
+          resetForm();
+          history.push('/places');
+        } else {
+          console.log('Login Failed');
+        }
+      })
+      .catch((err) => {
+        console.log('Error', err);
+      });
+  };
+  const handleRegister = () => {
+    if (password === confirmPass) {
+      const userObj = {
+        email: email,
+        name: name,
+        password: password,
+      };
+      axios
+        .post(baseUrl + 'users/register/', userObj)
+        .then((res) => {
+          console.log('/register', res);
+          if (res.data) {
+            console.log('Register Successful');
+            resetForm();
+            history.push('/places');
+          } else {
+            console.log('Sign Up Failed');
+          }
+        })
+        .catch((err) => {
+          console.log('Error', err);
+        });
+    }
+  };
+
+  const resetForm = () => {
+    setName('');
+    setEmail('');
+    setPassword('');
+    setConfirmPass('');
+  };
+
   return (
     <>
       <Navbar welcome={true} />
@@ -35,12 +90,20 @@ const Login = ({ loginProp }) => {
                   label='Email'
                   variant='outlined'
                   type='email'
+                  // value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   fullWidth
                 />
               </Grid>
               {!login && (
                 <Grid item xs={12}>
-                  <TextField label='Name' variant='outlined' fullWidth />
+                  <TextField
+                    label='Name'
+                    variant='outlined'
+                    // value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    fullWidth
+                  />
                 </Grid>
               )}
               <Grid item xs={12}>
@@ -48,6 +111,8 @@ const Login = ({ loginProp }) => {
                   label='Password'
                   variant='outlined'
                   type='password'
+                  // value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   fullWidth
                 />
               </Grid>
@@ -57,6 +122,8 @@ const Login = ({ loginProp }) => {
                     label='Confirm Password'
                     variant='outlined'
                     type='password'
+                    // value={confirmPass}
+                    onChange={(e) => setConfirmPass(e.target.value)}
                     fullWidth
                   />
                 </Grid>

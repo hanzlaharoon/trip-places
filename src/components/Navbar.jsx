@@ -8,6 +8,7 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 // import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import { Button } from '@material-ui/core';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,6 +70,7 @@ export default function Navbar({
 }) {
   const classes = useStyles();
   const [searchStr, setSearchStr] = useState(serachQuery);
+  const history = useHistory();
 
   const handleKeyPress = (e) => {
     if (e.code === 'Enter' || e.code === 'NumpadEnter') {
@@ -127,7 +129,7 @@ export default function Navbar({
                 />
               </div>
 
-              <Button color='secondary' href='#text-buttons'>
+              <Button color='secondary' onClick={() => history.push('/login')}>
                 Logout
               </Button>
             </>

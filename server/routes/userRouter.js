@@ -31,9 +31,12 @@ router.post('/register', function (req, res, next) {
     .catch((err) => next(err));
 });
 
-router.get('/login', function (req, res, next) {
+router.route('/login').all(function (req, res, next) {
   const email = req.body.email;
+  console.log('🚀 ~ file: userRouter.js ~ line 36 ~ req.body', req.body);
+  console.log('🚀 ~ file: userRouter.js ~ line 36 ~ email', email);
   const password = req.body.password;
+  console.log('🚀 ~ file: userRouter.js ~ line 38 ~ password', password);
 
   userSchema
     .findOne({ email: req.body.email })
