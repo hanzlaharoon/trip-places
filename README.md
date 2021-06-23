@@ -1,3 +1,13 @@
+# How to run this project!
+
+1. Open command prompt or git bash inside the directory and run `yarn install` to download dependencies
+2. `cd server`
+3. `npm install` to add dependencies of backend.
+4. `npm start` to run the server.
+5. While inside the root folder, run `yarn start` to start frontend.
+6. Make sure mondodb is running at your machine and db config path is correct.
+10. Voila!
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
